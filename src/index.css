@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --paper-bg: #faf7f2;
+    --paper-card: #ffffff;
+    --paper-border: #e7e0d5;
+    --ink-primary: #1c1917;
+    --ink-secondary: #57534e;
+    --ink-muted: #857f77;
+    --accent-amber: #b45309;
+    --accent-amber-light: #fef3c7;
+  }
+
+  .dark {
+    --paper-bg: #0d1117;
+    --paper-card: #161b22;
+    --paper-border: #272e3b;
+    --ink-primary: #f0f6fc;
+    --ink-secondary: #8b949e;
+    --ink-muted: #6e7681;
+    --accent-amber: #f59e0b;
+    --accent-amber-light: #2d2310;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.font-serif {
+  font-family: 'Newsreader', Georgia, Cambria, 'Times New Roman', serif;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+.font-mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.font-display {
+  font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Subtle Editorial Book Paper Background Pattern */
+.bg-editorial-paper {
+  background-color: var(--paper-bg);
+  background-image: radial-gradient(#d6cdc0 0.75px, transparent 0.75px), radial-gradient(#d6cdc0 0.75px, var(--paper-bg) 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+.dark .bg-editorial-paper {
+  background-color: #0b0e14;
+  background-image: radial-gradient(#1f2633 0.75px, transparent 0.75px), radial-gradient(#1f2633 0.75px, #0b0e14 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+/* Editorial Drop Cap */
+.drop-cap::first-letter {
+  float: left;
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 3.4rem;
+  line-height: 0.85;
+  font-weight: 700;
+  margin-right: 0.55rem;
+  margin-top: 0.2rem;
+  color: #b45309;
+}
+
+.dark .drop-cap::first-letter {
+  color: #f59e0b;
+}
+
+/* Smooth Editorial Shadow */
+.shadow-book {
+  box-shadow: 0 4px 20px -2px rgba(28, 25, 23, 0.05), 0 2px 6px -1px rgba(28, 25, 23, 0.03);
+}
+
+.shadow-book-lg {
+  box-shadow: 0 10px 30px -4px rgba(28, 25, 23, 0.08), 0 4px 10px -2px rgba(28, 25, 23, 0.04);
+}
+
+.dark .shadow-book {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+.dark .shadow-book-lg {
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.6), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom scrollbar for textbook feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d6cdc0;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #272e3b;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b45309;
+}
+
+/* Print Styles for Educational Handouts / Logs */
+@media print {
+  header, aside, .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+}

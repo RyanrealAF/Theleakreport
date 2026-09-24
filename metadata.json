@@ -1,0 +1,6 @@
+{
+  "name": "The Leak Report: Educational Field Manual",
+  "description": "An interactive educational textbook and applied study guide for hearing conversational subtext, cataloging micro-expressions, and mastering acoustic intelligence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
