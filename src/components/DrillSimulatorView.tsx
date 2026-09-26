@@ -54,7 +54,8 @@ export const DrillSimulatorView: React.FC = () => {
     setLoadingAi(true);
     setAiNotice(null);
     try {
-      const res = await fetch('/api/drills/generate', {
+      const apiBase = window.location.pathname.startsWith('/the-leak-report') ? '/the-leak-report' : '';
+      const res = await fetch(`${apiBase}/api/drills/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
