@@ -109,7 +109,7 @@ function AppContent() {
           ? 'bg-stone-900/90 border-stone-800 text-stone-100'
           : 'bg-white/95 border-stone-200 text-stone-900 shadow-xs'
       }`}>
-        <div className="max-w-7xl mx-auto flex items-center justify-between"><a href="https://buildwhilebleeding.com/" target="_blank" rel="noopener noreferrer" className="fixed left-2 bottom-2 z-50 text-[10px] font-mono uppercase tracking-widest text-amber-700 bg-white/90 border border-stone-300 px-2 py-1 hover:bg-stone-100">← Build While Bleeding</a>
+        <div className="max-w-7xl mx-auto flex items-center justify-between"><a href="https://buildwhilebleeding.com/" target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex text-[10px] font-mono uppercase tracking-widest text-amber-700 border border-stone-300 px-2 py-1 hover:bg-stone-100 shrink-0">← Build While Bleeding</a>
           <div className="flex items-center space-x-3.5">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
