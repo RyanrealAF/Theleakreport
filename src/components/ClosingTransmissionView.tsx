@@ -1,7 +1,13 @@
+/**
+ * Build While Bleeding — Valedictory Synthesis
+ * buildwhilebleeding.com
+ * Oral transmission simulator, closing philosophical manifesto, and pedagogical synthesis
+ */
+
 import React, { useState, useEffect } from 'react';
 import { CLOSING_TRANSMISSION } from '../data/closingTransmission';
 import { useTheme } from '../context/ThemeContext';
-import { ArrowRight, Play, Pause } from 'lucide-react';
+import { ArrowRight, Play, Pause, Radio } from 'lucide-react';
 
 interface ClosingTransmissionViewProps {
   onReturnToManual: () => void;
@@ -45,53 +51,58 @@ export const ClosingTransmissionView: React.FC<ClosingTransmissionViewProps> = (
   return (
     <div className="space-y-8 max-w-3xl mx-auto pb-24">
       {/* Header Banner */}
-      <section className={`border rounded-xl p-6 sm:p-8 text-center space-y-3.5 shadow-book ${
+      <section className={`border p-6 sm:p-8 text-center space-y-3.5 rounded-none ${
         isDark
-          ? 'border-stone-800 bg-stone-900/80 text-stone-100'
-          : 'border-stone-200 bg-white text-stone-900'
+          ? 'border-[#C5A36A]/30 bg-[#171513] text-[#E7E0D4]'
+          : 'border-[#7A5A22]/35 bg-[#F2ECE1] text-[#11100E]'
       }`}>
-        <div className="flex items-center justify-center gap-2 text-xs font-mono text-amber-800 dark:text-amber-400 uppercase tracking-widest font-semibold">
-          <span>Curriculum Valedictory Synthesis</span>
+        <div className="flex items-center justify-center gap-2 text-xs font-mono text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] uppercase tracking-widest font-bold">
+          <Radio className="w-4 h-4 text-[#C2332B] animate-pulse" />
+          <span>[TM 31-HEAR-01 // VALEDICTORY SYNTHESIS]</span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold tracking-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-black tracking-wide uppercase leading-tight">
           {CLOSING_TRANSMISSION.header}
         </h1>
 
-        <p className="text-xs sm:text-sm font-mono text-stone-500 uppercase tracking-widest">
+        <p className="text-xs sm:text-sm font-mono text-[#8E8A83] uppercase tracking-widest">
           {CLOSING_TRANSMISSION.subtitle}
         </p>
 
-        {/* Readout Transmission Audio Simulator Controls */}
-        <div className="pt-4 flex items-center justify-center gap-3">
+        {/* Readout Transmission Audio Simulator Controls with touch targets ≥ 44px */}
+        <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={togglePlayback}
-            className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-sans font-bold flex items-center gap-2 transition-colors shadow-xs cursor-pointer ${
+            className={`touch-target px-5 py-2.5 rounded-none text-xs sm:text-sm font-mono font-bold uppercase tracking-wider flex items-center gap-2 transition-colors cursor-pointer ${
               isPlaying
-                ? 'bg-rose-600 hover:bg-rose-700 text-white'
-                : 'bg-amber-600 hover:bg-amber-700 text-white dark:bg-amber-500 dark:text-stone-950'
+                ? 'bg-[#C2332B] text-white hover:bg-[#C2332B]/90'
+                : isDark
+                  ? 'bg-[#C5A36A] hover:bg-[#C5A36A]/90 text-[#11100E]'
+                  : 'bg-[#7A5A22] hover:bg-[#7A5A22]/90 text-[#E7E0D4]'
             }`}
           >
             {isPlaying ? (
               <>
                 <Pause className="w-4 h-4" />
-                <span>Pause Spoken Transmission</span>
+                <span>PAUSE TRANSMISSION</span>
               </>
             ) : (
               <>
                 <Play className="w-4 h-4" />
-                <span>Begin Oral Synthesis</span>
+                <span>BEGIN TRANSMISSION</span>
               </>
             )}
           </button>
 
           <button
             onClick={() => { setRevealedStanza(CLOSING_TRANSMISSION.stanzas.length - 1); setIsPlaying(false); }}
-            className={`px-3.5 py-2.5 rounded-xl text-xs font-mono border transition-colors cursor-pointer ${
-              isDark ? 'bg-stone-800 text-stone-300 border-stone-700 hover:bg-stone-700' : 'bg-stone-100 text-stone-700 border-stone-200 hover:bg-stone-200'
+            className={`touch-target px-4 py-2.5 rounded-none text-xs font-mono uppercase tracking-wider border transition-colors cursor-pointer ${
+              isDark
+                ? 'bg-[#11100E] text-[#E7E0D4] border-[#B9BDC2]/30 hover:border-[#C5A36A]'
+                : 'bg-[#DDD5C7] text-[#11100E] border-[#7A5A22]/40 hover:border-[#7A5A22]'
             }`}
           >
-            Read All Stanzas
+            READ ALL STANZAS
           </button>
         </div>
       </section>
@@ -101,28 +112,27 @@ export const ClosingTransmissionView: React.FC<ClosingTransmissionViewProps> = (
         {CLOSING_TRANSMISSION.stanzas.map((stanza, idx) => {
           const isCurrent = idx === revealedStanza && isPlaying;
           const isPastOrRead = idx <= revealedStanza;
-
           if (!isPastOrRead) return null;
 
           return (
             <div
               key={idx}
-              className={`p-6 sm:p-8 rounded-xl border transition-all duration-300 font-serif leading-relaxed shadow-book ${
+              className={`p-6 sm:p-8 border transition-all duration-200 font-serif leading-relaxed rounded-none ${
                 isCurrent
                   ? isDark
-                    ? 'border-amber-500 bg-amber-950/20 text-stone-100 ring-1 ring-amber-500'
-                    : 'border-amber-400 bg-amber-50/70 text-stone-900 ring-1 ring-amber-400'
+                    ? 'border-[#C5A36A] bg-[#C5A36A]/10 text-[#E7E0D4] ring-1 ring-[#C5A36A]'
+                    : 'border-[#7A5A22] bg-[#7A5A22]/15 text-[#11100E] ring-1 ring-[#7A5A22]'
                   : isDark
-                    ? 'border-stone-800 bg-stone-900/60 text-stone-300'
-                    : 'border-stone-200 bg-white text-stone-800'
+                    ? 'border-[#B9BDC2]/20 bg-[#171513] text-[#B9BDC2]'
+                    : 'border-[#7A5A22]/30 bg-[#F2ECE1] text-[#302C28]'
               }`}
             >
-              <div className="text-xs font-mono uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3 flex items-center justify-between">
-                <span>Stanza {String(idx + 1).padStart(2, '0')} of {CLOSING_TRANSMISSION.stanzas.length}</span>
+              <div className="text-xs font-mono uppercase tracking-widest text-[#8E8A83] mb-3 flex items-center justify-between border-b pb-2 border-[#B9BDC2]/15">
+                <span>STANZA {String(idx + 1).padStart(2, '0')} // {CLOSING_TRANSMISSION.stanzas.length}</span>
                 {isCurrent && (
-                  <span className="text-amber-700 dark:text-amber-400 font-bold flex items-center gap-1.5 font-mono">
-                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
-                    Now Reading
+                  <span className="text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] font-bold flex items-center gap-1.5 font-mono text-[11px]">
+                    <span className="w-2 h-2 bg-[#C2332B] animate-ping" />
+                    NOW TRANSMITTING
                   </span>
                 )}
               </div>
@@ -139,13 +149,17 @@ export const ClosingTransmissionView: React.FC<ClosingTransmissionViewProps> = (
         })}
       </div>
 
-      {/* Footer Return */}
-      <div className="pt-6 border-t border-stone-200 dark:border-stone-800 flex justify-center">
+      {/* Footer Return with touch target ≥ 44px */}
+      <div className="pt-6 border-t border-[#B9BDC2]/20 flex justify-center">
         <button
           onClick={onReturnToManual}
-          className="px-6 py-3 rounded-xl text-xs sm:text-sm font-sans font-bold bg-amber-600 hover:bg-amber-700 text-white dark:bg-amber-500 dark:text-stone-950 flex items-center gap-2 shadow-xs transition-colors cursor-pointer"
+          className={`touch-target px-6 py-3 rounded-none text-xs sm:text-sm font-mono font-bold uppercase tracking-wider flex items-center gap-2 transition-colors cursor-pointer ${
+            isDark
+              ? 'bg-[#C5A36A] hover:bg-[#C5A36A]/90 text-[#11100E]'
+              : 'bg-[#7A5A22] hover:bg-[#7A5A22]/90 text-[#E7E0D4]'
+          }`}
         >
-          <span>Return to Curriculum Modules</span>
+          <span>RETURN TO CURRICULUM MODULES</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

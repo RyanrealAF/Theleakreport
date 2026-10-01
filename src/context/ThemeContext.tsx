@@ -1,6 +1,12 @@
+/**
+ * Build While Bleeding — Theme Provider
+ * buildwhilebleeding.com
+ * High-contrast theme state manager: Asphalt (Dark) & Bone (Light)
+ */
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-type Theme = 'light' | 'dark';
+type Theme = 'dark' | 'light';
 
 interface ThemeContextType {
   theme: Theme;
@@ -10,8 +16,8 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'light',
-  isDark: false,
+  theme: 'dark',
+  isDark: true,
   toggleTheme: () => {},
   setTheme: () => {},
 });
@@ -22,9 +28,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const saved = localStorage.getItem('leak-report-theme');
       if (saved === 'dark' || saved === 'light') return saved;
     } catch (e) {
-      console.error(e);
+      console.error('[BWB] LocalStorage read failed:', e);
     }
-    return 'light'; // Default to pristine Educational Light Theme
+    // Default to the flagship Asphalt Monolith dark mode
+    return 'dark';
   });
 
   const isDark = theme === 'dark';
@@ -33,17 +40,21 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       localStorage.setItem('leak-report-theme', theme);
     } catch (e) {
-      console.error(e);
+      console.error('[BWB] LocalStorage save failed:', e);
     }
+
+    const root = document.documentElement;
     if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
+      root.classList.remove('light');
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.add('light');
+      root.classList.remove('dark');
     }
   }, [theme]);
 
   const toggleTheme = () => {
-    setThemeState(prev => (prev === 'light' ? 'dark' : 'light'));
+    setThemeState(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   const setTheme = (newTheme: Theme) => {

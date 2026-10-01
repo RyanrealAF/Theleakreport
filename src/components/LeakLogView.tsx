@@ -1,3 +1,9 @@
+/**
+ * Build While Bleeding — Leak Log View
+ * buildwhilebleeding.com
+ * Field dossier debrief logging, observational telemetry, and ethical non-weaponization records
+ */
+
 import React, { useState, useEffect } from 'react';
 import { DebriefLogEntry } from '../types';
 import { useTheme } from '../context/ThemeContext';
@@ -8,7 +14,9 @@ import {
   Download,
   Printer,
   Search,
-  Scale
+  Scale,
+  ShieldAlert,
+  SlidersHorizontal
 } from 'lucide-react';
 
 const INITIAL_SAMPLES: DebriefLogEntry[] = [
@@ -47,7 +55,6 @@ const INITIAL_SAMPLES: DebriefLogEntry[] = [
 export const LeakLogView: React.FC = () => {
   const { isDark } = useTheme();
   const [entries, setEntries] = useState<DebriefLogEntry[]>([]);
-  const [filterType] = useState<string>('all');
   const [filterSetting, setFilterSetting] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -78,21 +85,11 @@ export const LeakLogView: React.FC = () => {
         localStorage.setItem('leak-report-debrief-logs', JSON.stringify(INITIAL_SAMPLES));
       }
     } catch (e) {
-      console.error(e);
-      setEntries(INITIAL_SAMPLES);
+      console.error('[BWB] Storage load failed:', e);
     }
   }, []);
 
-  const saveEntries = (updated: DebriefLogEntry[]) => {
-    setEntries(updated);
-    try {
-      localStorage.setItem('leak-report-debrief-logs', JSON.stringify(updated));
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const handleAddEntry = (e: React.FormEvent) => {
+  const handleSaveEntry = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newEntry.verbatimPhrase?.trim()) return;
 
@@ -101,21 +98,26 @@ export const LeakLogView: React.FC = () => {
       date: newEntry.date || new Date().toISOString().split('T')[0],
       approxTime: newEntry.approxTime || '12:00',
       setting: (newEntry.setting as any) || 'other',
-      involved: newEntry.involved || 'Anonymous Interlocutor',
+      involved: newEntry.involved || 'Unspecified Party',
       priorDiscussion: newEntry.priorDiscussion || 'N/A',
       verbatimPhrase: newEntry.verbatimPhrase || '',
-      leakType: newEntry.leakType || 'micro-confession',
-      physicalOrDigitalTell: newEntry.physicalOrDigitalTell || 'N/A',
-      subjectOrbited: newEntry.subjectOrbited || 'N/A',
+      leakType: newEntry.leakType || 'observation',
+      physicalOrDigitalTell: newEntry.physicalOrDigitalTell || 'None documented',
+      subjectOrbited: newEntry.subjectOrbited || 'Unspoken Topic',
       strainOrStrategy: (newEntry.strainOrStrategy as any) || 'strain',
       firstInstinctRead: newEntry.firstInstinctRead || 'N/A',
-      actionTaken: newEntry.actionTaken || 'Observed silently; held Chapter 5 restraint.',
+      actionTaken: newEntry.actionTaken || 'Observed silently. No retaliation.',
     };
 
     const updated = [entryToSave, ...entries];
-    saveEntries(updated);
+    setEntries(updated);
+    try {
+      localStorage.setItem('leak-report-debrief-logs', JSON.stringify(updated));
+    } catch (err) {
+      console.error('[BWB] Storage save error:', err);
+    }
+
     setShowForm(false);
-    // Reset form
     setNewEntry({
       date: new Date().toISOString().split('T')[0],
       approxTime: new Date().toTimeString().slice(0, 5),
@@ -133,37 +135,34 @@ export const LeakLogView: React.FC = () => {
   };
 
   const handleDeleteEntry = (id: string) => {
-    if (confirm('Delete this field observation record from your dossier?')) {
-      const updated = entries.filter(e => e.id !== id);
-      saveEntries(updated);
+    const updated = entries.filter(e => e.id !== id);
+    setEntries(updated);
+    try {
+      localStorage.setItem('leak-report-debrief-logs', JSON.stringify(updated));
+    } catch (err) {
+      console.error('[BWB] Storage delete error:', err);
     }
   };
 
-  const handleExportJSON = () => {
+  const handleExportJson = () => {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(entries, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `behavioral-dossier-logs-${new Date().toISOString().split('T')[0]}.json`);
+    downloadAnchor.setAttribute('download', `bwb-debrief-dossier-${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   const filteredEntries = entries.filter(entry => {
-    if (filterType !== 'all' && entry.leakType !== filterType) return false;
     if (filterSetting !== 'all' && entry.setting !== filterSetting) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       return (
         entry.verbatimPhrase.toLowerCase().includes(q) ||
-        entry.subjectOrbited.toLowerCase().includes(q) ||
-        entry.firstInstinctRead.toLowerCase().includes(q) ||
+        entry.leakType.toLowerCase().includes(q) ||
         entry.involved.toLowerCase().includes(q) ||
-        entry.leakType.toLowerCase().includes(q)
+        entry.firstInstinctRead.toLowerCase().includes(q)
       );
     }
     return true;
@@ -172,214 +171,213 @@ export const LeakLogView: React.FC = () => {
   return (
     <div className="space-y-8 max-w-4xl mx-auto pb-24">
       {/* Educational Header Banner */}
-      <section className={`border rounded-xl p-6 sm:p-8 relative overflow-hidden shadow-book ${
+      <section className={`border p-6 sm:p-8 relative overflow-hidden rounded-none ${
         isDark
-          ? 'border-stone-800 bg-stone-900/80 text-stone-100'
-          : 'border-stone-200 bg-white text-stone-900'
+          ? 'border-[#C5A36A]/30 bg-[#171513] text-[#E7E0D4]'
+          : 'border-[#7A5A22]/35 bg-[#F2ECE1] text-[#11100E]'
       }`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className={`p-2.5 rounded-lg border ${
-              isDark ? 'bg-amber-950/60 text-amber-400 border-amber-800/60' : 'bg-amber-100 text-amber-900 border-amber-300'
+            <div className={`w-12 h-12 border flex items-center justify-center shrink-0 rounded-none ${
+              isDark ? 'bg-[#11100E] text-[#C5A36A] border-[#C5A36A]' : 'bg-[#DDD5C7] text-[#7A5A22] border-[#7A5A22]'
             }`}>
               <FileSpreadsheet className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight">
-                Empirical Field Dossier & Debrief Log
+              <div className="text-[10px] font-mono font-bold tracking-widest text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] uppercase">
+                [TM 31-HEAR-01 // FIELD LOG]
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-black tracking-wide uppercase leading-tight">
+                Field Dossier & Debrief Log
               </h1>
-              <p className="text-xs sm:text-sm font-mono text-amber-800 dark:text-amber-400 mt-0.5">
-                Part IV Fieldwork Sheet • Systematic Documentation of Conversational Leaks
+              <p className="text-xs sm:text-sm font-mono text-[#8E8A83] mt-0.5">
+                Archival Record of Conversational Friction, Physical Tells & Ethical Containment
               </p>
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setShowForm(!showForm)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-sans font-bold flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer ${
+              className={`touch-target px-4 py-2 border text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 transition-colors cursor-pointer rounded-none ${
                 isDark
-                  ? 'bg-amber-500 hover:bg-amber-400 text-stone-950'
-                  : 'bg-amber-600 hover:bg-amber-700 text-white'
+                  ? 'bg-[#C5A36A] text-[#11100E] border-[#C5A36A] hover:bg-[#C5A36A]/90'
+                  : 'bg-[#7A5A22] text-[#E7E0D4] border-[#7A5A22] hover:bg-[#7A5A22]/90'
               }`}
             >
               <Plus className="w-4 h-4" />
-              <span>{showForm ? 'Close Form' : 'New Observation'}</span>
+              <span>{showForm ? 'CANCEL' : 'NEW OBSERVATION'}</span>
             </button>
 
             <button
-              onClick={handleExportJSON}
-              className={`px-3 py-2 rounded-xl text-xs font-mono flex items-center gap-1.5 border transition-colors cursor-pointer ${
+              onClick={handleExportJson}
+              className={`touch-target px-3 py-2 border text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer rounded-none ${
                 isDark
-                  ? 'bg-stone-800 text-stone-300 border-stone-700 hover:bg-stone-700'
-                  : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
+                  ? 'bg-[#11100E] text-[#E7E0D4] border-[#B9BDC2]/30 hover:border-[#C5A36A]'
+                  : 'bg-[#DDD5C7] text-[#11100E] border-[#7A5A22]/40 hover:border-[#7A5A22]'
               }`}
-              title="Download dossier as JSON file"
+              title="Export all observations to JSON"
             >
-              <Download className="w-3.5 h-3.5" />
-              <span>Export JSON</span>
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">EXPORT</span>
             </button>
 
             <button
-              onClick={handlePrint}
-              className={`px-3 py-2 rounded-xl text-xs font-mono flex items-center gap-1.5 border transition-colors cursor-pointer ${
+              onClick={() => window.print()}
+              className={`touch-target px-3 py-2 border text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer rounded-none ${
                 isDark
-                  ? 'bg-stone-800 text-stone-300 border-stone-700 hover:bg-stone-700'
-                  : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
+                  ? 'bg-[#11100E] text-[#E7E0D4] border-[#B9BDC2]/30 hover:border-[#C5A36A]'
+                  : 'bg-[#DDD5C7] text-[#11100E] border-[#7A5A22]/40 hover:border-[#7A5A22]'
               }`}
               title="Print field dossier"
             >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Print Dossier</span>
+              <Printer className="w-4 h-4" />
+              <span className="hidden sm:inline">PRINT</span>
             </button>
           </div>
         </div>
 
-        <p className={`text-sm sm:text-base font-sans leading-relaxed mt-4 ${
-          isDark ? 'text-stone-300' : 'text-stone-600'
+        <p className={`text-sm sm:text-base font-sans leading-relaxed mt-4 pt-3 border-t ${
+          isDark ? 'border-[#B9BDC2]/20 text-[#B9BDC2]' : 'border-[#7A5A22]/25 text-[#302C28]'
         }`}>
-          A structured laboratory log for capturing real-world interpersonal leaks. Record the raw verbatim transcript, the physical/respiratory marker, the underlying subtext, and the ethical containment protocol observed.
+          Observational field notes must be logged within two hours of conversational occurrence while auditory recall remains unwarped by narrative rationalization. Maintain strict adherence to Chapter 5: log for personal comprehension, never for retaliatory blackmail.
         </p>
       </section>
 
-      {/* New Entry Form */}
+      {/* New Entry Formulation Panel */}
       {showForm && (
         <form
-          onSubmit={handleAddEntry}
-          className={`border rounded-xl p-6 sm:p-7 space-y-4 shadow-book-lg ${
-            isDark ? 'border-amber-500/40 bg-stone-900/90' : 'border-amber-300 bg-amber-50/50'
+          onSubmit={handleSaveEntry}
+          className={`border p-6 sm:p-7 space-y-4 rounded-none ${
+            isDark ? 'border-[#C5A36A]/50 bg-[#171513]' : 'border-[#7A5A22]/50 bg-[#F2ECE1]'
           }`}
         >
-          <div className="flex items-center justify-between border-b pb-2 border-amber-500/20 text-xs font-mono font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
-            <span>Log New Empirical Field Observation</span>
-            <span>All entries stored locally</span>
+          <div className="flex items-center justify-between border-b pb-3 border-[#B9BDC2]/20 text-xs font-mono">
+            <span className="font-bold text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] uppercase tracking-wider">
+              [NEW FIELD OBSERVATION LOG ENTRY]
+            </span>
+            <span className="text-[#8E8A83]">CONFIDENTIAL STUDY DOSSIER</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Date</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Date</label>
               <input
                 type="date"
                 required
                 value={newEntry.date}
                 onChange={e => setNewEntry({ ...newEntry, date: e.target.value })}
-                className={`w-full rounded-lg px-3 py-2 border font-mono text-xs ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`touch-target w-full px-3 py-2 border rounded-none font-mono text-xs ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               />
             </div>
-
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Approx Time</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Time</label>
               <input
                 type="time"
                 value={newEntry.approxTime}
                 onChange={e => setNewEntry({ ...newEntry, approxTime: e.target.value })}
-                className={`w-full rounded-lg px-3 py-2 border font-mono text-xs ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`touch-target w-full px-3 py-2 border rounded-none font-mono text-xs ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               />
             </div>
-
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Setting / Environment</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Setting</label>
               <select
                 value={newEntry.setting}
                 onChange={e => setNewEntry({ ...newEntry, setting: e.target.value as any })}
-                className={`w-full rounded-lg px-3 py-2 border font-sans text-xs capitalize ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`touch-target w-full px-3 py-2 border rounded-none font-mono text-xs cursor-pointer ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               >
                 <option value="work">Workplace</option>
                 <option value="romantic">Romantic</option>
                 <option value="family">Family</option>
                 <option value="friend group">Friend Group</option>
-                <option value="street">Public / Street</option>
+                <option value="street">Street</option>
                 <option value="digital">Digital / Text</option>
                 <option value="other">Other</option>
               </select>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Subject / Participants Involved</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Participants Involved</label>
               <input
                 type="text"
-                placeholder="e.g. Senior VP, Project Manager, Sibling..."
+                placeholder="Senior VP, Project Manager, Sibling..."
                 value={newEntry.involved}
                 onChange={e => setNewEntry({ ...newEntry, involved: e.target.value })}
-                className={`w-full rounded-lg px-3 py-2 border font-sans text-xs ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`touch-target w-full px-3 py-2 border rounded-none font-sans text-xs ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               />
             </div>
-
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Prior Conversation Topic</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Prior Topic Under Discussion</label>
               <input
                 type="text"
-                placeholder="What was being discussed immediately prior to the slip?"
+                placeholder="What was being discussed right before the friction point?"
                 value={newEntry.priorDiscussion}
                 onChange={e => setNewEntry({ ...newEntry, priorDiscussion: e.target.value })}
-                className={`w-full rounded-lg px-3 py-2 border font-sans text-xs ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`touch-target w-full px-3 py-2 border rounded-none font-sans text-xs ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               />
             </div>
           </div>
 
           <div>
-            <label className="font-mono text-stone-500 uppercase tracking-wider text-xs block mb-1">
+            <label className="font-mono text-[#8E8A83] uppercase tracking-wider text-xs block mb-1">
               Verbatim Phrase (Exact Words Spoken) *
             </label>
             <textarea
               rows={2}
               required
-              placeholder="Quote the exact friction line as spoken..."
+              placeholder="Record verbatim quote with vocal catches, self-corrections, or pitch drops..."
               value={newEntry.verbatimPhrase}
               onChange={e => setNewEntry({ ...newEntry, verbatimPhrase: e.target.value })}
-              className={`w-full rounded-lg px-3 py-2 border font-serif text-sm ${
-                isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+              className={`w-full p-3 border rounded-none font-serif text-sm ${
+                isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
               }`}
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Leak Typology</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Leak Typology</label>
               <input
                 type="text"
-                placeholder="e.g. overcorrection, non-answer..."
+                placeholder="overcorrection, non-answer, projection..."
                 value={newEntry.leakType}
                 onChange={e => setNewEntry({ ...newEntry, leakType: e.target.value })}
-                className={`w-full rounded-lg px-3 py-2 border font-sans text-xs ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`touch-target w-full px-3 py-2 border rounded-none font-sans text-xs ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               />
             </div>
-
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Physical / Digital Marker</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Observable Marker / Tell</label>
               <input
                 type="text"
-                placeholder="Micro-fidget, pupil dilation, typing delay..."
+                placeholder="Pupil dilation, throat clearing, typing pause..."
                 value={newEntry.physicalOrDigitalTell}
                 onChange={e => setNewEntry({ ...newEntry, physicalOrDigitalTell: e.target.value })}
-                className={`w-full rounded-lg px-3 py-2 border font-sans text-xs ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`touch-target w-full px-3 py-2 border rounded-none font-sans text-xs ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               />
             </div>
-
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Strain or Strategy?</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Strain or Strategy?</label>
               <select
                 value={newEntry.strainOrStrategy}
                 onChange={e => setNewEntry({ ...newEntry, strainOrStrategy: e.target.value as any })}
-                className={`w-full rounded-lg px-3 py-2 border font-sans text-xs ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`touch-target w-full px-3 py-2 border rounded-none font-mono text-xs cursor-pointer ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               >
                 <option value="strain">Strain (Involuntary Leak)</option>
@@ -388,29 +386,28 @@ export const LeakLogView: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Initial Diagnostic Read</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Initial Diagnostic Read</label>
               <textarea
                 rows={2}
-                placeholder="What was the unspoken psychological driver behind this line?"
+                placeholder="Unspoken cognitive-emotional driver..."
                 value={newEntry.firstInstinctRead}
                 onChange={e => setNewEntry({ ...newEntry, firstInstinctRead: e.target.value })}
-                className={`w-full rounded-lg px-3 py-2 border font-sans text-xs ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`w-full p-2.5 border rounded-none font-sans text-xs ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               />
             </div>
-
             <div>
-              <label className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Ethical Restraint Action Taken (Ch. 5)</label>
+              <label className="text-[#8E8A83] uppercase tracking-wider block mb-1">Ethical Restraint Action Taken (Ch. 5)</label>
               <textarea
                 rows={2}
-                placeholder="How did you maintain restraint without weaponizing this observation?"
+                placeholder="How did you preserve containment without weaponizing?"
                 value={newEntry.actionTaken}
                 onChange={e => setNewEntry({ ...newEntry, actionTaken: e.target.value })}
-                className={`w-full rounded-lg px-3 py-2 border font-sans text-xs ${
-                  isDark ? 'bg-stone-950 border-stone-700 text-stone-100' : 'bg-white border-stone-300 text-stone-900'
+                className={`w-full p-2.5 border rounded-none font-sans text-xs ${
+                  isDark ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
                 }`}
               />
             </div>
@@ -420,15 +417,17 @@ export const LeakLogView: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="px-4 py-2 rounded-lg text-xs font-medium border text-stone-500 hover:text-stone-700 cursor-pointer"
+              className="touch-target px-4 py-2 border rounded-none text-xs font-mono uppercase text-[#8E8A83] hover:text-[#E7E0D4] border-[#B9BDC2]/20 cursor-pointer"
             >
-              Cancel
+              CANCEL
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white dark:bg-amber-500 dark:text-stone-950 shadow-xs cursor-pointer"
+              className={`touch-target px-5 py-2 rounded-none text-xs font-mono font-bold uppercase tracking-wider cursor-pointer ${
+                isDark ? 'bg-[#C5A36A] text-[#11100E]' : 'bg-[#7A5A22] text-[#E7E0D4]'
+              }`}
             >
-              Commit to Field Dossier
+              COMMIT TO DOSSIER
             </button>
           </div>
         </form>
@@ -437,16 +436,16 @@ export const LeakLogView: React.FC = () => {
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between text-xs font-mono">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
+          <Search className="w-4 h-4 text-[#8E8A83] absolute left-3 top-3" />
           <input
             type="text"
             placeholder="Search dossier entries..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className={`w-full rounded-lg pl-9 pr-3 py-2 border focus:outline-none transition-colors ${
+            className={`touch-target w-full pl-9 pr-3 py-2 border rounded-none font-sans text-xs focus:outline-none transition-colors ${
               isDark
-                ? 'bg-stone-900 border-stone-700 text-stone-100 placeholder-stone-500 focus:border-amber-500'
-                : 'bg-white border-stone-300 text-stone-900 placeholder-stone-400 focus:border-amber-600'
+                ? 'bg-[#171513] border-[#B9BDC2]/30 text-[#E7E0D4] placeholder-[#8E8A83] focus:border-[#C5A36A]'
+                : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E] placeholder-[#5E5851] focus:border-[#7A5A22]'
             }`}
           />
         </div>
@@ -455,59 +454,59 @@ export const LeakLogView: React.FC = () => {
           <select
             value={filterSetting}
             onChange={e => setFilterSetting(e.target.value)}
-            className={`rounded-lg px-2.5 py-1.5 border text-xs font-mono capitalize cursor-pointer ${
-              isDark ? 'bg-stone-900 border-stone-700 text-stone-300' : 'bg-white border-stone-300 text-stone-700'
+            className={`touch-target px-3 py-2 border text-xs font-mono uppercase cursor-pointer rounded-none ${
+              isDark ? 'bg-[#171513] border-[#B9BDC2]/30 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
             }`}
           >
-            <option value="all">All Settings</option>
-            <option value="work">Workplace</option>
-            <option value="romantic">Romantic</option>
-            <option value="family">Family</option>
-            <option value="friend group">Friend Group</option>
-            <option value="street">Street</option>
-            <option value="digital">Digital</option>
+            <option value="all">ALL SETTINGS</option>
+            <option value="work">WORKPLACE</option>
+            <option value="romantic">ROMANTIC</option>
+            <option value="family">FAMILY</option>
+            <option value="friend group">FRIEND GROUP</option>
+            <option value="street">STREET</option>
+            <option value="digital">DIGITAL</option>
           </select>
         </div>
       </div>
 
-      {/* List of Dossier Log Entries (Unboxed Clean Metadata) */}
+      {/* List of Dossier Log Entries */}
       <div className="space-y-4">
         {filteredEntries.map(entry => (
           <div
             key={entry.id}
-            className={`p-5 sm:p-6 rounded-xl border transition-all space-y-4 shadow-book ${
+            className={`p-5 sm:p-6 border transition-all space-y-4 rounded-none ${
               isDark
-                ? 'bg-stone-900/60 border-stone-800'
-                : 'bg-white border-stone-200'
+                ? 'bg-[#171513] border-[#B9BDC2]/20'
+                : 'bg-[#F2ECE1] border-[#7A5A22]/30'
             }`}
           >
             {/* Top metadata line with zero-pill discipline */}
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b pb-3 border-stone-200 dark:border-stone-800 text-xs font-mono text-stone-500 dark:text-stone-400">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b pb-3 border-[#B9BDC2]/20 text-xs font-mono text-[#8E8A83]">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-amber-800 dark:text-amber-400 uppercase">
-                  {entry.date} · {entry.approxTime}
+                <span className="font-bold text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] uppercase">
+                  {entry.date} // {entry.approxTime}
                 </span>
-                <span aria-hidden="true" className="text-stone-300 dark:text-stone-700">·</span>
-                <span className="capitalize">
+                <span aria-hidden="true" className="text-[#8E8A83]">·</span>
+                <span className="uppercase font-semibold text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E]">
                   {entry.setting}
                 </span>
-                <span aria-hidden="true" className="text-stone-300 dark:text-stone-700">·</span>
-                <span className={`uppercase font-semibold text-[11px] ${
+                <span aria-hidden="true" className="text-[#8E8A83]">·</span>
+                <span className={`uppercase font-bold text-[11px] ${
                   entry.strainOrStrategy === 'strain'
-                    ? 'text-rose-700 dark:text-rose-400'
-                    : 'text-indigo-700 dark:text-indigo-400'
+                    ? 'text-[#C2332B]'
+                    : 'text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]'
                 }`}>
-                  {entry.strainOrStrategy}
+                  [{entry.strainOrStrategy}]
                 </span>
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="font-semibold text-amber-800 dark:text-amber-400">
+                <span className="font-mono font-bold text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] uppercase">
                   {entry.leakType}
                 </span>
                 <button
                   onClick={() => handleDeleteEntry(entry.id)}
-                  className="p-1 rounded text-stone-400 hover:text-rose-600 transition-colors cursor-pointer"
+                  className="p-1 text-[#8E8A83] hover:text-[#C2332B] transition-colors cursor-pointer"
                   title="Delete log record"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -516,46 +515,46 @@ export const LeakLogView: React.FC = () => {
             </div>
 
             {/* Verbatim quote */}
-            <div className={`p-4 rounded-xl border font-serif text-base sm:text-lg italic leading-relaxed shadow-book ${
-              isDark ? 'bg-stone-950/80 border-stone-800/80 text-stone-100' : 'bg-stone-50 border-stone-200 text-stone-900'
+            <div className={`p-4 border font-serif text-base sm:text-lg italic leading-relaxed rounded-none ${
+              isDark ? 'bg-[#11100E] border-[#B9BDC2]/20 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/30 text-[#11100E]'
             }`}>
               "{entry.verbatimPhrase}"
             </div>
 
             {/* Structured analysis grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-sans">
-              <div className={`p-3.5 rounded-lg border ${
-                isDark ? 'bg-stone-950/40 border-stone-800' : 'bg-stone-50/50 border-stone-200'
+              <div className={`p-3.5 border rounded-none ${
+                isDark ? 'bg-[#11100E] border-[#B9BDC2]/20' : 'bg-[#DDD5C7] border-[#7A5A22]/30'
               }`}>
-                <span className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Observable Marker / Tell:</span>
-                <p className="text-stone-700 dark:text-stone-300">{entry.physicalOrDigitalTell}</p>
+                <span className="font-mono text-[#8E8A83] uppercase tracking-wider block mb-1">Observable Marker / Tell:</span>
+                <p className="text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E]">{entry.physicalOrDigitalTell}</p>
               </div>
 
-              <div className={`p-3.5 rounded-lg border ${
-                isDark ? 'bg-stone-950/40 border-stone-800' : 'bg-stone-50/50 border-stone-200'
+              <div className={`p-3.5 border rounded-none ${
+                isDark ? 'bg-[#11100E] border-[#B9BDC2]/20' : 'bg-[#DDD5C7] border-[#7A5A22]/30'
               }`}>
-                <span className="font-mono text-stone-500 uppercase tracking-wider block mb-1">Diagnostic Hypothesis:</span>
-                <p className="text-stone-700 dark:text-stone-300">{entry.firstInstinctRead}</p>
+                <span className="font-mono text-[#8E8A83] uppercase tracking-wider block mb-1">Diagnostic Hypothesis:</span>
+                <p className="text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E]">{entry.firstInstinctRead}</p>
               </div>
 
-              <div className={`p-3.5 rounded-lg border ${
-                isDark ? 'bg-stone-950/40 border-stone-800' : 'bg-stone-50/50 border-stone-200'
+              <div className={`p-3.5 border rounded-none ${
+                isDark ? 'bg-[#11100E] border-[#B9BDC2]/20' : 'bg-[#DDD5C7] border-[#7A5A22]/30'
               }`}>
-                <span className="font-mono text-stone-500 uppercase tracking-wider block mb-1 flex items-center gap-1 text-emerald-700 dark:text-emerald-400">
-                  <Scale className="w-3 h-3" />
+                <span className="font-mono text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] uppercase tracking-wider block mb-1 flex items-center gap-1 font-bold">
+                  <Scale className="w-3 h-3 text-[#C5A36A]" />
                   <span>Ethical Restraint:</span>
                 </span>
-                <p className="text-stone-700 dark:text-stone-300">{entry.actionTaken}</p>
+                <p className="text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E]">{entry.actionTaken}</p>
               </div>
             </div>
           </div>
         ))}
 
         {filteredEntries.length === 0 && (
-          <div className={`p-10 text-center rounded-xl border text-sm font-sans ${
-            isDark ? 'border-stone-800 text-stone-400' : 'border-stone-200 text-stone-500'
+          <div className={`p-10 text-center border text-sm font-sans rounded-none ${
+            isDark ? 'border-[#B9BDC2]/20 text-[#8E8A83]' : 'border-[#7A5A22]/30 text-[#5E5851]'
           }`}>
-            No field records match your filter criteria. Click <strong>New Observation</strong> above to document a real-world case.
+            No field records match your filter criteria. Click <strong>NEW OBSERVATION</strong> above to document a real-world case.
           </div>
         )}
       </div>

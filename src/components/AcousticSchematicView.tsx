@@ -1,6 +1,12 @@
+/**
+ * Build While Bleeding — Acoustic Schematic View
+ * buildwhilebleeding.com
+ * Real-time acoustic frequency spectrum, cognitive-emotional latency analyzer, and physiological leak architecture
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { Activity, Info, Sliders, Brain, Ear, Zap } from 'lucide-react';
+import { Activity, Info, Sliders, Brain, Ear, Zap, ShieldAlert } from 'lucide-react';
 
 export const AcousticSchematicView: React.FC = () => {
   const { isDark } = useTheme();
@@ -25,6 +31,7 @@ export const AcousticSchematicView: React.FC = () => {
         })
       );
     }, 250);
+
     return () => clearInterval(interval);
   }, [activeFrequency]);
 
@@ -32,7 +39,7 @@ export const AcousticSchematicView: React.FC = () => {
     'callout-ear': {
       title: '1. Peripheral Auditory Transduction',
       subtitle: 'Tympanic Membrane & Cochlear Organ of Corti',
-      desc: 'Acoustic soundwaves are collected by the pinna and mechanically converted into neural impulses. The ear receives raw fundamental frequency (F0), formant shifts, and micro-glottal stops before any interpretive semantic processing begins.',
+      desc: 'Acoustic soundwaves are mechanically converted into neural impulses. The ear receives raw fundamental frequency (F0), formant shifts, and micro-glottal stops before any interpretive semantic censorship begins.',
       latency: '10–25 ms'
     },
     'callout-limbic': {
@@ -60,67 +67,67 @@ export const AcousticSchematicView: React.FC = () => {
   return (
     <div className="space-y-8 max-w-4xl mx-auto pb-24">
       {/* Educational Header Banner */}
-      <section className={`border rounded-xl p-6 sm:p-8 relative overflow-hidden shadow-book ${
+      <section className={`border p-6 sm:p-8 relative overflow-hidden rounded-none ${
         isDark
-          ? 'border-stone-800 bg-stone-900/80 text-stone-100'
-          : 'border-stone-200 bg-white text-stone-900'
+          ? 'border-[#C5A36A]/30 bg-[#171513] text-[#E7E0D4]'
+          : 'border-[#7A5A22]/35 bg-[#F2ECE1] text-[#11100E]'
       }`}>
         {/* Unboxed Metadata Header */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3.5 mb-4 border-stone-200 dark:border-stone-800 text-xs font-mono text-stone-500 dark:text-stone-400">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3.5 mb-4 border-[#B9BDC2]/20 text-xs font-mono text-[#8E8A83]">
           <div className="flex items-center gap-2">
-            <span className="font-semibold uppercase tracking-wider text-amber-800 dark:text-amber-400">
-              Curriculum Section 04
+            <span className="font-bold uppercase tracking-widest text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]">
+              [TM 31-HEAR-01 // FIG 1.0]
             </span>
-            <span aria-hidden="true" className="text-stone-300 dark:text-stone-700">·</span>
-            <span>BEHAVIORAL ACOUSTICS & COGNITIVE NEUROSCIENCE</span>
+            <span aria-hidden="true" className="text-[#8E8A83]">·</span>
+            <span>BEHAVIORAL ACOUSTICS & COGNITIVE LATENCY</span>
           </div>
-          <span className="font-medium tracking-wide">
-            FIGURE 1.0 // PERCEPTUAL ARCHITECTURE
+          <span className="font-mono text-[11px] tracking-widest">
+            PERCEPTUAL ARCHITECTURE
           </span>
         </div>
 
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold tracking-tight">
-              Anatomy of Acoustic Perception & Conversational Leakage
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-black tracking-wide uppercase leading-tight">
+              Anatomy of Acoustic Perception & Leakage
             </h1>
-            <p className="text-xs sm:text-sm font-mono text-amber-800 dark:text-amber-400 mt-1.5">
-              A Cognitive Study Guide to Auditory Processing, Physiological Latencies, and Vocal Tells
+            <p className="text-xs sm:text-sm font-mono text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] mt-1.5 uppercase tracking-wider">
+              Neural Processing Latency, Vocal Tract Resonance & The 200–400ms Vulnerability Delta
             </p>
           </div>
 
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-mono shrink-0 ${
-            isDark ? 'bg-stone-950 border-stone-800 text-stone-300' : 'bg-stone-50 border-stone-200 text-stone-700'
+          <div className={`touch-target flex items-center gap-2 px-3.5 py-2 border text-xs font-mono shrink-0 rounded-none ${
+            isDark ? 'bg-[#11100E] border-[#C5A36A]/40 text-[#E7E0D4]' : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E]'
           }`}>
-            <Activity className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse" />
-            <span>SPECTRAL MONITOR: <strong>CALIBRATED</strong></span>
+            <Activity className="w-4 h-4 text-[#C2332B] animate-pulse" />
+            <span className="font-mono text-[11px] font-bold">SPECTRAL MONITOR: <strong className="text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]">CALIBRATED</strong></span>
           </div>
         </div>
       </section>
 
       {/* Main Educational Schematic Diagram */}
-      <section className={`border rounded-xl p-6 sm:p-8 space-y-6 shadow-book ${
-        isDark ? 'border-stone-800 bg-stone-900/60' : 'border-stone-200 bg-white'
+      <section className={`border p-6 sm:p-8 space-y-6 rounded-none ${
+        isDark ? 'border-[#B9BDC2]/20 bg-[#171513]' : 'border-[#7A5A22]/30 bg-[#F2ECE1]'
       }`}>
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b pb-3.5 border-stone-200 dark:border-stone-800">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
-            <Brain className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b pb-3.5 border-[#B9BDC2]/20">
+          <div className="flex items-center gap-2 text-sm font-display font-black uppercase tracking-widest text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]">
+            <Brain className="w-4 h-4 text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]" />
             <span>Interactive Schematic: Neural Transmission & The Leak Window</span>
           </div>
-          <span className="text-xs font-mono text-stone-400 dark:text-stone-500">
-            SELECT CALLOUT NODES TO EXAMINE THE NEURAL CHAIN
+          <span className="text-[11px] font-mono text-[#8E8A83]">
+            [SELECT NODES TO EXAMINE THE NEURAL CHAIN]
           </span>
         </div>
 
         {/* Anatomical Schematic Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Diagram Visualization Box (7 cols) */}
-          <div className={`lg:col-span-7 rounded-xl p-5 sm:p-6 border relative overflow-hidden flex flex-col justify-between shadow-book ${
-            isDark ? 'bg-stone-950/80 border-stone-800' : 'bg-stone-50 border-stone-200'
+          <div className={`lg:col-span-7 p-5 sm:p-6 border relative overflow-hidden flex flex-col justify-between rounded-none ${
+            isDark ? 'bg-[#11100E] border-[#B9BDC2]/20' : 'bg-[#DDD5C7] border-[#7A5A22]/30'
           }`}>
-            <div className="flex items-center justify-between text-xs font-mono text-stone-500 mb-4">
+            <div className="flex items-center justify-between text-xs font-mono text-[#8E8A83] mb-4">
               <span>FIG 1.1: AUDITORY TRANSLATION PATHWAY</span>
-              <span className="text-amber-700 dark:text-amber-400 font-semibold">DELTA Δ = ~300ms</span>
+              <span className="text-[#C2332B] font-mono font-bold">DELTA Δ = ~300ms</span>
             </div>
 
             {/* Interactive Neural Path Nodes */}
@@ -137,31 +144,31 @@ export const AcousticSchematicView: React.FC = () => {
                   <button
                     key={node.id}
                     onClick={() => setSelectedCallout(node.id)}
-                    className={`w-full text-left p-3.5 rounded-lg border transition-all flex items-center justify-between cursor-pointer ${
+                    className={`w-full touch-target text-left p-3.5 border transition-all flex items-center justify-between cursor-pointer rounded-none ${
                       isSelected
                         ? isDark
-                          ? 'bg-amber-950/40 border-amber-500 text-amber-200 shadow-xs'
-                          : 'bg-amber-50 border-amber-400 text-amber-950 shadow-xs'
+                          ? 'bg-[#C5A36A]/20 border-[#C5A36A] text-[#E7E0D4]'
+                          : 'bg-[#7A5A22]/20 border-[#7A5A22] text-[#11100E]'
                         : isDark
-                          ? 'bg-stone-900/60 border-stone-800 text-stone-300 hover:border-stone-700'
-                          : 'bg-white border-stone-200 text-stone-700 hover:border-stone-300'
+                          ? 'bg-[#171513] border-[#B9BDC2]/20 text-[#B9BDC2] hover:border-[#C5A36A]/50'
+                          : 'bg-[#F2ECE1] border-[#7A5A22]/30 text-[#302C28] hover:border-[#7A5A22]/60'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-md ${
+                      <div className={`w-8 h-8 flex items-center justify-center border rounded-none ${
                         isSelected
-                          ? isDark ? 'bg-amber-500 text-stone-950 font-bold' : 'bg-amber-600 text-white'
-                          : isDark ? 'bg-stone-800 text-stone-400' : 'bg-stone-100 text-stone-600'
+                          ? isDark ? 'bg-[#C5A36A] text-[#11100E] border-[#C5A36A]' : 'bg-[#7A5A22] text-[#E7E0D4] border-[#7A5A22]'
+                          : isDark ? 'bg-[#11100E] text-[#B9BDC2] border-[#B9BDC2]/20' : 'bg-[#DDD5C7] text-[#302C28] border-[#7A5A22]/30'
                       }`}>
                         <IconComponent className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="font-serif font-bold text-sm sm:text-base">{node.label}</div>
-                        <div className="text-xs font-mono text-stone-500 dark:text-stone-400">{node.sub}</div>
+                        <div className="font-display font-bold text-base uppercase tracking-wide">{node.label}</div>
+                        <div className="text-xs font-mono text-[#8E8A83]">{node.sub}</div>
                       </div>
                     </div>
-                    <span className="text-xs font-mono font-semibold text-amber-700 dark:text-amber-400">
-                      {isSelected ? '● Active' : 'Inspect'}
+                    <span className="text-xs font-mono font-bold text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]">
+                      {isSelected ? '[ACTIVE]' : 'INSPECT'}
                     </span>
                   </button>
                 );
@@ -169,19 +176,19 @@ export const AcousticSchematicView: React.FC = () => {
             </div>
 
             {/* Simulated Frequency Oscilloscope */}
-            <div className="mt-5 pt-4 border-t border-stone-200 dark:border-stone-800">
-              <div className="flex items-center justify-between text-xs font-mono text-stone-500 mb-2.5">
+            <div className="mt-5 pt-4 border-t border-[#B9BDC2]/20">
+              <div className="flex items-center justify-between text-xs font-mono text-[#8E8A83] mb-2.5">
                 <span>SUBTEXT SPECTROGRAM SIMULATOR</span>
-                <span className="text-amber-700 dark:text-amber-400 font-semibold">{activeFrequency} Hz Calibration</span>
+                <span className="text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] font-mono font-bold">{activeFrequency} Hz Calibration</span>
               </div>
-              <div className="h-16 flex items-end justify-between gap-1 bg-stone-950 rounded-lg p-2 overflow-hidden border border-stone-800">
+              <div className="h-16 flex items-end justify-between gap-1 bg-[#11100E] p-2 overflow-hidden border border-[#B9BDC2]/20 rounded-none">
                 {audioOscillation.map((height, idx) => (
                   <div
                     key={idx}
-                    className={`w-full rounded-t transition-all duration-200 ${
+                    className={`w-full transition-all duration-200 ${
                       idx >= 16 && idx <= 26
-                        ? 'bg-amber-400 dark:bg-amber-500'
-                        : 'bg-stone-700'
+                        ? 'bg-[#C2332B]'
+                        : 'bg-[#C5A36A]/60'
                     }`}
                     style={{ height: `${height}%` }}
                   />
@@ -191,41 +198,41 @@ export const AcousticSchematicView: React.FC = () => {
           </div>
 
           {/* Right Callout Explanatory Card (5 cols) */}
-          <div className={`lg:col-span-5 rounded-xl p-5 sm:p-6 border space-y-4 flex flex-col justify-between shadow-book ${
-            isDark ? 'bg-stone-950/80 border-stone-800' : 'bg-amber-50/40 border-amber-200/90'
+          <div className={`lg:col-span-5 p-5 sm:p-6 border space-y-4 flex flex-col justify-between rounded-none ${
+            isDark ? 'bg-[#11100E] border-[#B9BDC2]/20' : 'bg-[#DDD5C7] border-[#7A5A22]/30'
           }`}>
             <div className="space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono text-stone-500">
-                <span className="font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider">
-                  PATHWAY ANALYSIS
+              <div className="flex items-center justify-between text-xs font-mono text-[#8E8A83]">
+                <span className="font-mono font-bold text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] uppercase tracking-wider">
+                  [PATHWAY TELEMETRY]
                 </span>
-                <span className="font-mono text-stone-600 dark:text-stone-400">
-                  Latency: <strong>{activeCalloutData.latency}</strong>
+                <span className="font-mono text-xs">
+                  Latency: <strong className="text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E]">{activeCalloutData.latency}</strong>
                 </span>
               </div>
 
-              <h3 className="font-serif font-bold text-xl text-stone-900 dark:text-stone-100">
+              <h3 className="font-display font-black text-2xl uppercase tracking-wide text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E]">
                 {activeCalloutData.title}
               </h3>
 
-              <div className="text-xs font-mono font-medium text-stone-500 dark:text-stone-400">
+              <div className="text-xs font-mono font-bold text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]">
                 {activeCalloutData.subtitle}
               </div>
 
-              <p className="text-sm font-sans leading-relaxed text-stone-700 dark:text-stone-300 pt-1">
+              <p className="text-sm font-sans leading-relaxed text-[#B9BDC2] dark:text-[#B9BDC2] light:text-[#302C28] pt-1">
                 {activeCalloutData.desc}
               </p>
             </div>
 
-            {/* Pedagogical Takeaway Box */}
-            <div className={`p-4 rounded-xl border text-xs font-sans space-y-2 shadow-xs ${
-              isDark ? 'bg-stone-900/90 border-stone-800 text-stone-300' : 'bg-white border-stone-200 text-stone-700'
+            {/* Doctrinal Axiom Box */}
+            <div className={`p-4 border text-xs font-sans space-y-2 rounded-none ${
+              isDark ? 'bg-[#171513] border-[#C5A36A]/30 text-[#E7E0D4]' : 'bg-[#F2ECE1] border-[#7A5A22]/40 text-[#11100E]'
             }`}>
-              <div className="font-mono font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1.5 uppercase">
-                <Info className="w-3.5 h-3.5" />
+              <div className="font-mono font-bold text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] flex items-center gap-1.5 uppercase">
+                <ShieldAlert className="w-3.5 h-3.5 text-[#C2332B]" />
                 <span>Diagnostic Rule of Thumb</span>
               </div>
-              <p className="italic leading-relaxed font-serif text-sm">
+              <p className="italic leading-relaxed font-sans text-sm">
                 "Words represent what a person decided to present. Frequency spikes, respiratory catches, and glottal friction represent what their body was already suffering before they decided."
               </p>
             </div>
@@ -233,18 +240,18 @@ export const AcousticSchematicView: React.FC = () => {
         </div>
 
         {/* Interactive Frequency Spectrum Slider */}
-        <div className={`p-5 rounded-xl border space-y-3 shadow-book ${
-          isDark ? 'bg-stone-950/50 border-stone-800' : 'bg-stone-50 border-stone-200'
+        <div className={`p-5 border space-y-3 rounded-none ${
+          isDark ? 'bg-[#11100E] border-[#B9BDC2]/20' : 'bg-[#DDD5C7] border-[#7A5A22]/30'
         }`}>
           <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-            <span className="font-bold text-stone-700 dark:text-stone-300 flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            <span className="font-bold text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E] flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]" />
               ACOUSTIC FREQUENCY FILTER: {activeFrequency} Hz
             </span>
-            <span className="text-stone-500">
-              {activeFrequency < 1000 && 'Sub-Vocal Fundamental Pitch (Insecurity / Hesitation)'}
-              {activeFrequency >= 1000 && activeFrequency < 2500 && 'Vocal Tract Formants (Laryngeal Constriction / Glottal Stress)'}
-              {activeFrequency >= 2500 && 'High-Frequency Sibilance (Aggression / Micro-Defensiveness)'}
+            <span className="text-[#8E8A83] font-mono text-[11px]">
+              {activeFrequency < 1000 && '[Sub-Vocal Fundamental Pitch: Insecurity / Hesitation]'}
+              {activeFrequency >= 1000 && activeFrequency < 2500 && '[Vocal Tract Formants: Laryngeal Constriction / Glottal Stress]'}
+              {activeFrequency >= 2500 && '[High-Frequency Sibilance: Aggression / Micro-Defensiveness]'}
             </span>
           </div>
 
@@ -255,10 +262,10 @@ export const AcousticSchematicView: React.FC = () => {
             step="50"
             value={activeFrequency}
             onChange={e => setActiveFrequency(Number(e.target.value))}
-            className="w-full accent-amber-600 cursor-pointer h-2 bg-stone-300 dark:bg-stone-700 rounded-lg appearance-none"
+            className="w-full accent-[#C5A36A] cursor-pointer h-2 bg-[#171513] dark:bg-[#171513] light:bg-[#DDD5C7] rounded-none appearance-none"
           />
 
-          <div className="flex justify-between text-[11px] font-mono text-stone-400">
+          <div className="flex justify-between text-[11px] font-mono text-[#8E8A83]">
             <span>200 Hz (Fundamental)</span>
             <span>1500 Hz (Formants)</span>
             <span>2800 Hz (Strain Spike)</span>

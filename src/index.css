@@ -1,120 +1,158 @@
+/**
+ * Build While Bleeding — Visual Design System & CSS Tokens
+ * buildwhilebleeding.com
+ * Brand tokens, typographic hierarchy, zero-pill discipline, and high-contrast theme styling
+ */
+
 @import "tailwindcss";
 
 @layer base {
   :root {
-    --paper-bg: #faf7f2;
-    --paper-card: #ffffff;
-    --paper-border: #e7e0d5;
-    --ink-primary: #1c1917;
-    --ink-secondary: #57534e;
-    --ink-muted: #857f77;
-    --accent-amber: #b45309;
-    --accent-amber-light: #fef3c7;
+    /* Build While Bleeding Core Brand Tokens */
+    --asphalt: #11100E;
+    --bone: #E7E0D4;
+    --rust: #C2332B;
+    --bronze: #C5A36A;
+    --bronze-dark: #7a5a22;
+    --chrome: #B9BDC2;
+
+    /* Theme mappings (Default: Dark / Asphalt Monolith) */
+    --bg-primary: #11100E;
+    --bg-surface: #171513;
+    --bg-card: #1D1A17;
+    --bg-elevated: #24211D;
+    --border-primary: rgba(197, 163, 106, 0.3);
+    --border-subtle: rgba(185, 189, 194, 0.18);
+    --border-rust: rgba(194, 51, 43, 0.4);
+    --text-primary: #E7E0D4;
+    --text-secondary: #B9BDC2;
+    --text-muted: #8E8A83;
+    --accent-bronze: #C5A36A;
+    --accent-rust: #C2332B;
   }
 
-  .dark {
-    --paper-bg: #0d1117;
-    --paper-card: #161b22;
-    --paper-border: #272e3b;
-    --ink-primary: #f0f6fc;
-    --ink-secondary: #8b949e;
-    --ink-muted: #6e7681;
-    --accent-amber: #f59e0b;
-    --accent-amber-light: #2d2310;
+  .light {
+    --bg-primary: #E7E0D4;
+    --bg-surface: #DDD5C7;
+    --bg-card: #F2ECE1;
+    --bg-elevated: #E5DEC0;
+    --border-primary: rgba(122, 90, 34, 0.35);
+    --border-subtle: rgba(17, 16, 14, 0.18);
+    --border-rust: rgba(163, 37, 30, 0.45);
+    --text-primary: #11100E;
+    --text-secondary: #302C28;
+    --text-muted: #5E5851;
+    --accent-bronze: #7a5a22;
+    --accent-rust: #A3251E;
   }
 
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Libre Franklin', system-ui, -apple-system, sans-serif;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
   }
 }
 
-.font-serif {
-  font-family: 'Newsreader', Georgia, Cambria, 'Times New Roman', serif;
+/* Typography Utility Classes */
+.font-display {
+  font-family: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .font-sans {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'Libre Franklin', system-ui, -apple-system, sans-serif;
 }
 
 .font-mono {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
-.font-display {
-  font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
-}
-
-/* Subtle Editorial Book Paper Background Pattern */
-.bg-editorial-paper {
-  background-color: var(--paper-bg);
-  background-image: radial-gradient(#d6cdc0 0.75px, transparent 0.75px), radial-gradient(#d6cdc0 0.75px, var(--paper-bg) 0.75px);
-  background-size: 30px 30px;
-  background-position: 0 0, 15px 15px;
-}
-
-.dark .bg-editorial-paper {
-  background-color: #0b0e14;
-  background-image: radial-gradient(#1f2633 0.75px, transparent 0.75px), radial-gradient(#1f2633 0.75px, #0b0e14 0.75px);
-  background-size: 30px 30px;
-  background-position: 0 0, 15px 15px;
-}
-
-/* Editorial Drop Cap */
-.drop-cap::first-letter {
-  float: left;
+.font-serif {
   font-family: 'Newsreader', Georgia, serif;
-  font-size: 3.4rem;
-  line-height: 0.85;
-  font-weight: 700;
-  margin-right: 0.55rem;
-  margin-top: 0.2rem;
-  color: #b45309;
 }
 
-.dark .drop-cap::first-letter {
-  color: #f59e0b;
+/* Tactical Architectural Monograph Background */
+.bg-bwb-grid {
+  background-color: var(--bg-primary);
+  background-image: 
+    linear-gradient(to right, rgba(185, 189, 194, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(185, 189, 194, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
-/* Smooth Editorial Shadow */
-.shadow-book {
-  box-shadow: 0 4px 20px -2px rgba(28, 25, 23, 0.05), 0 2px 6px -1px rgba(28, 25, 23, 0.03);
+.light .bg-bwb-grid {
+  background-color: var(--bg-primary);
+  background-image: 
+    linear-gradient(to right, rgba(17, 16, 14, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(17, 16, 14, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
-.shadow-book-lg {
-  box-shadow: 0 10px 30px -4px rgba(28, 25, 23, 0.08), 0 4px 10px -2px rgba(28, 25, 23, 0.04);
+/* Zero-Pill Discipline & Touch Target Enforcement */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
 }
 
-.dark .shadow-book {
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2);
+/* Architectural Framing & Bevels */
+.bwb-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0px;
 }
 
-.dark .shadow-book-lg {
-  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.6), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
+.bwb-box-active {
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 0px;
 }
 
-/* Custom scrollbar for textbook feel */
+/* BWB Drop Cap with Big Shoulders Display */
+.drop-cap-bwb::first-letter {
+  float: left;
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: 3.8rem;
+  line-height: 0.8;
+  font-weight: 900;
+  margin-right: 0.65rem;
+  margin-top: 0.15rem;
+  color: var(--accent-bronze);
+  text-transform: uppercase;
+}
+
+/* High Contrast Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d6cdc0;
-  border-radius: 9999px;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: #272e3b;
+  background: rgba(197, 163, 106, 0.3);
+  border-radius: 0px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b45309;
+  background: var(--accent-bronze);
+}
+
+/* Motion Reduction - Section 6 WP2 Strict Compliance */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Print Styles for Educational Handouts / Logs */
@@ -123,8 +161,8 @@
     display: none !important;
   }
   body {
-    background: white !important;
-    color: black !important;
+    background: #ffffff !important;
+    color: #11100E !important;
   }
   main {
     max-width: 100% !important;

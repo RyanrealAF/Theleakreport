@@ -1,3 +1,9 @@
+/**
+ * Build While Bleeding — Academic Lexicon View
+ * buildwhilebleeding.com
+ * Applied behavioral acoustics lexicon, clinical taxonomy of leakage definitions, and ethical terminology
+ */
+
 import React, { useState } from 'react';
 import { GLOSSARY } from '../data/glossary';
 import { useTheme } from '../context/ThemeContext';
@@ -24,73 +30,76 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ onNavigateChapter })
   return (
     <div className="space-y-8 max-w-4xl mx-auto pb-24">
       {/* Educational Header Banner */}
-      <section className={`border rounded-xl p-6 sm:p-8 relative overflow-hidden shadow-book ${
+      <section className={`border p-6 sm:p-8 relative overflow-hidden rounded-none ${
         isDark
-          ? 'border-stone-800 bg-stone-900/80 text-stone-100'
-          : 'border-stone-200 bg-white text-stone-900'
+          ? 'border-[#C5A36A]/30 bg-[#171513] text-[#E7E0D4]'
+          : 'border-[#7A5A22]/35 bg-[#F2ECE1] text-[#11100E]'
       }`}>
         <div className="flex items-center gap-3.5 mb-2">
-          <div className={`p-2.5 rounded-lg border ${
-            isDark ? 'bg-amber-950/60 text-amber-400 border-amber-800/60' : 'bg-amber-100 text-amber-900 border-amber-300'
+          <div className={`w-12 h-12 border flex items-center justify-center shrink-0 rounded-none ${
+            isDark ? 'bg-[#11100E] text-[#C5A36A] border-[#C5A36A]' : 'bg-[#DDD5C7] text-[#7A5A22] border-[#7A5A22]'
           }`}>
             <BookMarked className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight">
+            <div className="text-[10px] font-mono font-bold tracking-widest text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] uppercase">
+              [TM 31-HEAR-01 // LEXICON]
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-black tracking-wide uppercase leading-tight">
               Academic & Operational Lexicon
             </h1>
-            <p className="text-xs sm:text-sm font-mono text-amber-800 dark:text-amber-400 mt-0.5">
-              Part IV Reference Guide • 22 Core Psychological & Linguistic Definitions
+            <p className="text-xs sm:text-sm font-mono text-[#8E8A83] mt-0.5">
+              Part IV Reference Suite • 22 Core Psychological & Auditory Definitions
             </p>
           </div>
         </div>
 
-        <p className={`text-sm sm:text-base font-sans leading-relaxed mt-3 ${
-          isDark ? 'text-stone-300' : 'text-stone-600'
+        <p className={`text-sm sm:text-base font-sans leading-relaxed mt-4 pt-3 border-t ${
+          isDark ? 'border-[#B9BDC2]/20 text-[#B9BDC2]' : 'border-[#7A5A22]/25 text-[#302C28]'
         }`}>
-          A rigorous dictionary defining the technical terms, behavioral concepts, and ethical frameworks established across the 19 curriculum modules.
+          A structured dictionary defining technical acoustic terms, cognitive-emotional latency concepts, and ethical restraint frameworks established across the 19 curriculum modules.
         </p>
       </section>
 
       {/* Filter and Search */}
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between text-xs font-mono">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
+          <Search className="w-4 h-4 text-[#8E8A83] absolute left-3 top-3" />
           <input
             type="text"
             placeholder="Search lexicon term or definition..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className={`w-full rounded-lg pl-9 pr-3 py-2 border focus:outline-none transition-colors ${
+            className={`touch-target w-full pl-9 pr-3 py-2 border rounded-none font-sans text-xs focus:outline-none transition-colors ${
               isDark
-                ? 'bg-stone-900 border-stone-700 text-stone-100 placeholder-stone-500 focus:border-amber-500'
-                : 'bg-white border-stone-300 text-stone-900 placeholder-stone-400 focus:border-amber-600'
+                ? 'bg-[#171513] border-[#B9BDC2]/30 text-[#E7E0D4] placeholder-[#8E8A83] focus:border-[#C5A36A]'
+                : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E] placeholder-[#5E5851] focus:border-[#7A5A22]'
             }`}
           />
         </div>
 
-        {/* Category Segmented Control */}
-        <div className={`flex flex-wrap items-center gap-1 p-1 rounded-lg border w-full sm:w-auto ${
-          isDark ? 'bg-stone-900/90 border-stone-800' : 'bg-stone-100 border-stone-200'
+        {/* Category Segmented Control with zero-pill discipline */}
+        <div className={`flex flex-wrap items-center gap-1 p-1 border w-full sm:w-auto rounded-none ${
+          isDark ? 'bg-[#171513] border-[#B9BDC2]/20' : 'bg-[#DDD5C7] border-[#7A5A22]/30'
         }`}>
           {[
-            { id: 'all', label: 'All Terms' },
-            { id: 'core', label: 'Core Theory' },
-            { id: 'leak-type', label: 'Leak Typologies' },
-            { id: 'framework', label: 'Cognitive Frameworks' },
-            { id: 'ethics', label: 'Ethical Restraint' },
+            { id: 'all', label: 'ALL TERMS' },
+            { id: 'core', label: 'CORE THEORY' },
+            { id: 'leak-type', label: 'LEAK TYPOLOGIES' },
+            { id: 'framework', label: 'FRAMEWORKS' },
+            { id: 'ethics', label: 'ETHICAL RESTRAINT' },
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setCategory(tab.id)}
-              className={`px-3 py-1.5 rounded-md text-xs font-mono transition-colors cursor-pointer ${
+              className={`touch-target px-3 py-2 text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer rounded-none ${
                 category === tab.id
                   ? isDark
-                    ? 'bg-amber-500 text-stone-950 font-bold shadow-xs'
-                    : 'bg-white text-stone-900 font-bold shadow-xs'
+                    ? 'bg-[#C5A36A] text-[#11100E] font-bold'
+                    : 'bg-[#7A5A22] text-[#E7E0D4] font-bold'
                   : isDark
-                    ? 'text-stone-400 hover:text-stone-200'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'text-[#B9BDC2] hover:text-[#E7E0D4] hover:bg-[#11100E]'
+                    : 'text-[#302C28] hover:text-[#11100E] hover:bg-[#E5DEC0]'
               }`}
             >
               {tab.label}
@@ -104,41 +113,41 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ onNavigateChapter })
         {filtered.map(item => (
           <div
             key={item.term}
-            className={`p-5 sm:p-6 rounded-xl border transition-all shadow-book ${
+            className={`p-5 sm:p-6 border transition-all rounded-none ${
               isDark
-                ? 'bg-stone-900/60 border-stone-800 hover:border-stone-700'
-                : 'bg-white border-stone-200 hover:border-stone-300'
+                ? 'bg-[#171513] border-[#B9BDC2]/20 hover:border-[#C5A36A]'
+                : 'bg-[#F2ECE1] border-[#7A5A22]/30 hover:border-[#7A5A22]'
             }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
               <div className="space-y-2 flex-1">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <h3 className="font-serif font-bold text-xl text-stone-900 dark:text-stone-100">
+                  <h3 className="font-display font-black text-xl uppercase tracking-wide text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E]">
                     {item.term}
                   </h3>
-                  <span className="text-xs font-mono uppercase tracking-wider text-amber-800 dark:text-amber-400 font-semibold">
-                    / {item.category}
+                  <span className="text-xs font-mono uppercase tracking-widest text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] font-bold">
+                    // [{item.category}]
                   </span>
                 </div>
 
-                <p className="text-sm sm:text-base font-sans text-stone-700 dark:text-stone-300 leading-relaxed">
+                <p className="text-sm sm:text-base font-sans text-[#B9BDC2] dark:text-[#B9BDC2] light:text-[#302C28] leading-relaxed">
                   {item.definition}
                 </p>
 
                 {item.chapters && item.chapters.length > 0 && (
-                  <div className="flex items-center flex-wrap gap-2 pt-1 text-xs font-mono text-stone-500 dark:text-stone-400">
+                  <div className="flex items-center flex-wrap gap-2 pt-1 text-xs font-mono text-[#8E8A83]">
                     <span>Referenced in:</span>
                     {item.chapters.map(chNum => (
                       <button
                         key={chNum}
                         onClick={() => onNavigateChapter(`ch${chNum}`)}
-                        className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+                        className={`touch-target px-2.5 py-1 border transition-colors cursor-pointer rounded-none min-h-[36px] ${
                           isDark
-                            ? 'bg-stone-800 border-stone-700 text-stone-300 hover:text-amber-400 hover:border-amber-500'
-                            : 'bg-stone-100 border-stone-200 text-stone-700 hover:text-amber-800 hover:border-amber-600'
+                            ? 'bg-[#11100E] border-[#B9BDC2]/30 text-[#E7E0D4] hover:text-[#C5A36A] hover:border-[#C5A36A]'
+                            : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E] hover:text-[#7A5A22] hover:border-[#7A5A22]'
                         }`}
                       >
-                        Module {chNum}
+                        MOD {chNum}
                       </button>
                     ))}
                   </div>
@@ -148,14 +157,14 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ onNavigateChapter })
               {item.chapters && item.chapters.length > 0 && (
                 <button
                   onClick={() => onNavigateChapter(`ch${item.chapters[0]}`)}
-                  className={`self-start sm:self-center px-3 py-1.5 rounded-lg text-xs font-sans font-medium border flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer ${
+                  className={`touch-target self-start sm:self-center px-3.5 py-2 text-xs font-mono font-bold uppercase tracking-wider border flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer rounded-none ${
                     isDark
-                      ? 'bg-stone-800 text-stone-300 border-stone-700 hover:border-amber-500 hover:text-amber-300'
-                      : 'bg-stone-50 text-stone-700 border-stone-200 hover:border-amber-600 hover:text-amber-900'
+                      ? 'bg-[#11100E] text-[#E7E0D4] border-[#B9BDC2]/30 hover:border-[#C5A36A] hover:text-[#C5A36A]'
+                      : 'bg-[#DDD5C7] text-[#11100E] border-[#7A5A22]/40 hover:border-[#7A5A22]'
                   }`}
                 >
-                  <span>Open Primary Module</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                  <span>PRIMARY MOD {item.chapters[0]}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]" />
                 </button>
               )}
             </div>
@@ -163,8 +172,8 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ onNavigateChapter })
         ))}
 
         {filtered.length === 0 && (
-          <div className={`p-8 text-center rounded-xl border text-sm font-sans ${
-            isDark ? 'border-stone-800 text-stone-400' : 'border-stone-200 text-stone-500'
+          <div className={`p-8 text-center border text-sm font-sans rounded-none ${
+            isDark ? 'border-[#B9BDC2]/20 text-[#8E8A83]' : 'border-[#7A5A22]/30 text-[#5E5851]'
           }`}>
             No lexicon terms matched your search query.
           </div>

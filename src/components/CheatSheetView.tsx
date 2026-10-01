@@ -1,3 +1,9 @@
+/**
+ * Build While Bleeding — Taxonomy Reference Matrix
+ * buildwhilebleeding.com
+ * Classification matrix of 14 conversational leak typologies, observable markers, and curriculum cross-references
+ */
+
 import React, { useState } from 'react';
 import { CHEAT_SHEET } from '../data/cheatSheet';
 import { useTheme } from '../context/ThemeContext';
@@ -30,70 +36,73 @@ export const CheatSheetView: React.FC<CheatSheetViewProps> = ({ onNavigateChapte
   return (
     <div className="space-y-8 max-w-4xl mx-auto pb-24">
       {/* Educational Header Banner */}
-      <section className={`border rounded-xl p-6 sm:p-8 relative overflow-hidden shadow-book ${
+      <section className={`border p-6 sm:p-8 relative overflow-hidden rounded-none ${
         isDark
-          ? 'border-stone-800 bg-stone-900/80 text-stone-100'
-          : 'border-stone-200 bg-white text-stone-900'
+          ? 'border-[#C5A36A]/30 bg-[#171513] text-[#E7E0D4]'
+          : 'border-[#7A5A22]/35 bg-[#F2ECE1] text-[#11100E]'
       }`}>
         <div className="flex items-center gap-3.5 mb-2">
-          <div className={`p-2.5 rounded-lg border ${
-            isDark ? 'bg-amber-950/60 text-amber-400 border-amber-800/60' : 'bg-amber-100 text-amber-900 border-amber-300'
+          <div className={`w-12 h-12 border flex items-center justify-center shrink-0 rounded-none ${
+            isDark ? 'bg-[#11100E] text-[#C5A36A] border-[#C5A36A]' : 'bg-[#DDD5C7] text-[#7A5A22] border-[#7A5A22]'
           }`}>
             <Table className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight">
+            <div className="text-[10px] font-mono font-bold tracking-widest text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22] uppercase">
+              [TM 31-HEAR-01 // MATRIX]
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-black tracking-wide uppercase leading-tight">
               Taxonomy of Conversational Leaks
             </h1>
-            <p className="text-xs sm:text-sm font-mono text-amber-800 dark:text-amber-400 mt-0.5">
-              Part IV Reference Matrix • Classification of 14 Linguistic Tells & Behavioral Markers
+            <p className="text-xs sm:text-sm font-mono text-[#8E8A83] mt-0.5">
+              Part IV Reference Suite • Classification of 14 Linguistic Tells & Behavioral Markers
             </p>
           </div>
         </div>
 
-        <p className={`text-sm sm:text-base font-sans leading-relaxed mt-3 ${
-          isDark ? 'text-stone-300' : 'text-stone-600'
+        <p className={`text-sm sm:text-base font-sans leading-relaxed mt-4 pt-3 border-t ${
+          isDark ? 'border-[#B9BDC2]/20 text-[#B9BDC2]' : 'border-[#7A5A22]/25 text-[#302C28]'
         }`}>
-          This comprehensive reference matrix catalogs the 14 core subtext leak typologies identified in the curriculum. Use the search and category filters below to review behavioral tells, underlying psychological drivers, and direct chapter anchors.
+          This comprehensive reference matrix catalogs the 14 core subtext leak typologies identified across the curriculum. Use the search and category filters below to examine behavioral markers, diagnostic cues, and chapter origins.
         </p>
       </section>
 
       {/* Filter and Search Controls */}
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between text-xs font-mono">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
+          <Search className="w-4 h-4 text-[#8E8A83] absolute left-3 top-3" />
           <input
             type="text"
             placeholder="Search leak typology, tell, or category..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className={`w-full rounded-lg pl-9 pr-3 py-2 border focus:outline-none transition-colors ${
+            className={`touch-target w-full pl-9 pr-3 py-2 border rounded-none font-sans text-xs focus:outline-none transition-colors ${
               isDark
-                ? 'bg-stone-900 border-stone-700 text-stone-100 placeholder-stone-500 focus:border-amber-500'
-                : 'bg-white border-stone-300 text-stone-900 placeholder-stone-400 focus:border-amber-600'
+                ? 'bg-[#171513] border-[#B9BDC2]/30 text-[#E7E0D4] placeholder-[#8E8A83] focus:border-[#C5A36A]'
+                : 'bg-[#DDD5C7] border-[#7A5A22]/40 text-[#11100E] placeholder-[#5E5851] focus:border-[#7A5A22]'
             }`}
           />
         </div>
 
-        {/* Category Segmented Control */}
-        <div className={`flex flex-wrap items-center gap-1 p-1 rounded-lg border w-full sm:w-auto ${
-          isDark ? 'bg-stone-900/90 border-stone-800' : 'bg-stone-100 border-stone-200'
+        {/* Category Segmented Control with zero-pill discipline */}
+        <div className={`flex flex-wrap items-center gap-1 p-1 border w-full sm:w-auto rounded-none ${
+          isDark ? 'bg-[#171513] border-[#B9BDC2]/20' : 'bg-[#DDD5C7] border-[#7A5A22]/30'
         }`}>
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-md text-xs font-mono transition-colors capitalize cursor-pointer ${
+              className={`touch-target px-3 py-2 text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer rounded-none ${
                 selectedCategory === cat
                   ? isDark
-                    ? 'bg-amber-500 text-stone-950 font-bold shadow-xs'
-                    : 'bg-white text-stone-900 font-bold shadow-xs'
+                    ? 'bg-[#C5A36A] text-[#11100E] font-bold'
+                    : 'bg-[#7A5A22] text-[#E7E0D4] font-bold'
                   : isDark
-                    ? 'text-stone-400 hover:text-stone-200'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'text-[#B9BDC2] hover:text-[#E7E0D4] hover:bg-[#11100E]'
+                    : 'text-[#302C28] hover:text-[#11100E] hover:bg-[#E5DEC0]'
               }`}
             >
-              {cat === 'all' ? 'All Typologies' : cat}
+              {cat === 'all' ? 'ALL TYPOLOGIES' : cat}
             </button>
           ))}
         </div>
@@ -104,52 +113,52 @@ export const CheatSheetView: React.FC<CheatSheetViewProps> = ({ onNavigateChapte
         {filtered.map((item, idx) => (
           <div
             key={`${item.chapterId}-${idx}`}
-            className={`p-5 sm:p-6 rounded-xl border transition-all shadow-book ${
+            className={`p-5 sm:p-6 border transition-all rounded-none ${
               isDark
-                ? 'bg-stone-900/60 border-stone-800 hover:border-stone-700'
-                : 'bg-white border-stone-200 hover:border-stone-300'
+                ? 'bg-[#171513] border-[#B9BDC2]/20 hover:border-[#C5A36A]'
+                : 'bg-[#F2ECE1] border-[#7A5A22]/30 hover:border-[#7A5A22]'
             }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
               <div className="space-y-2 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-xs font-semibold uppercase tracking-wider text-amber-800 dark:text-amber-400">
-                    {item.category}
+                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]">
+                    [{item.category}]
                   </span>
-                  <span aria-hidden="true" className="text-stone-300 dark:text-stone-700">·</span>
-                  <h3 className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
+                  <span aria-hidden="true" className="text-[#8E8A83]">·</span>
+                  <h3 className="font-display font-bold text-lg uppercase tracking-wide text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E]">
                     {item.leakType}
                   </h3>
                 </div>
 
-                <div className="text-sm sm:text-base font-sans text-stone-700 dark:text-stone-300">
-                  <strong className="text-stone-400 dark:text-stone-500 font-mono text-xs uppercase">Observable Tell:</strong>{' '}
+                <div className="text-sm sm:text-base font-sans text-[#B9BDC2] dark:text-[#B9BDC2] light:text-[#302C28]">
+                  <strong className="text-[#8E8A83] font-mono text-xs uppercase tracking-wider">Observable Tell:</strong>{' '}
                   {item.tell}
                 </div>
 
-                <div className="text-xs font-mono text-stone-500 dark:text-stone-400">
-                  Documented in <strong>Module {item.chapterNumber}</strong>
+                <div className="text-xs font-mono text-[#8E8A83]">
+                  Documented in <strong className="text-[#E7E0D4] dark:text-[#E7E0D4] light:text-[#11100E]">Module {item.chapterNumber}</strong>
                 </div>
               </div>
 
               <button
                 onClick={() => onNavigateChapter(item.chapterId)}
-                className={`self-start sm:self-center px-3.5 py-1.5 rounded-lg text-xs font-sans font-medium border flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer ${
+                className={`touch-target self-start sm:self-center px-3.5 py-2 text-xs font-mono font-bold uppercase tracking-wider border flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer rounded-none ${
                   isDark
-                    ? 'bg-stone-800 text-stone-300 border-stone-700 hover:border-amber-500 hover:text-amber-300'
-                    : 'bg-stone-50 text-stone-700 border-stone-200 hover:border-amber-600 hover:text-amber-900'
+                    ? 'bg-[#11100E] text-[#E7E0D4] border-[#B9BDC2]/30 hover:border-[#C5A36A] hover:text-[#C5A36A]'
+                    : 'bg-[#DDD5C7] text-[#11100E] border-[#7A5A22]/40 hover:border-[#7A5A22]'
                 }`}
               >
-                <span>Study Module {item.chapterNumber}</span>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                <span>STUDY MOD {item.chapterNumber}</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#C5A36A] dark:text-[#C5A36A] light:text-[#7A5A22]" />
               </button>
             </div>
           </div>
         ))}
 
         {filtered.length === 0 && (
-          <div className={`p-8 text-center rounded-xl border text-sm font-sans ${
-            isDark ? 'border-stone-800 text-stone-400' : 'border-stone-200 text-stone-500'
+          <div className={`p-8 text-center border text-sm font-sans rounded-none ${
+            isDark ? 'border-[#B9BDC2]/20 text-[#8E8A83]' : 'border-[#7A5A22]/30 text-[#5E5851]'
           }`}>
             No leak typologies matched your search query. Try broadening your terms.
           </div>
